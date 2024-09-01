@@ -40,7 +40,6 @@ typedef std::vector<RotatedRect> vector_RotatedRect;
 typedef std::vector<KeyPoint> vector_KeyPoint;
 typedef std::vector<Mat> vector_Mat;
 typedef std::vector<std::vector<Mat> > vector_vector_Mat;
-typedef std::vector<UMat> vector_UMat;
 typedef std::vector<DMatch> vector_DMatch;
 typedef std::vector<String> vector_String;
 typedef std::vector<std::string> vector_string;

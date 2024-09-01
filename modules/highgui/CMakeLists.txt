@@ -1,5 +1,5 @@
 set(the_description "High-level GUI")
-ocv_add_module(highgui opencv_imgproc)
+ocv_add_module(highgui opencv_imgproc WRAP python)
 
 option(WITH_CVI "build with cvi" OFF)
 option(WITH_AW "build with aw" OFF)

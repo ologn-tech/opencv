@@ -824,6 +824,10 @@ int capture_v4l2_impl::read_frame(unsigned char* bgrdata)
         int c;
         int desired_channels = 3;
         unsigned char* pixeldata = stbi_load_from_memory((const unsigned char*)data[i] + offset, bytesused, &w, &h, &c, desired_channels);
+        if (!pixeldata)
+        {
+            return -1;
+        }
 
         // crop and resize to output
         cv::Mat cap_rgb(cap_height, cap_width, CV_8UC3, (void*)pixeldata);

@@ -241,15 +241,22 @@ void VideoCapture::release()
 
 VideoCapture& VideoCapture::operator>>(Mat& image)
 {
+    read(image);
+
+    return *this;
+}
+
+bool VideoCapture::read(OutputArray image)
+{
     if (!d->is_opened)
-        return *this;
+        return false;
 
 #if CV_WITH_AW
     if (capture_v4l2_aw_isp::supported())
     {
         image.create(d->height, d->width, CV_8UC3);
 
-        d->cap_v4l2_aw_isp.read_frame((unsigned char*)image.data);
+        d->cap_v4l2_aw_isp.read_frame((unsigned char*)image.getMat().data);
     }
     else
 #endif
@@ -258,7 +265,7 @@ VideoCapture& VideoCapture::operator>>(Mat& image)
     {
         image.create(d->height, d->width, CV_8UC3);
 
-        d->cap_v4l2_rk_aiq.read_frame((unsigned char*)image.data);
+        d->cap_v4l2_rk_aiq.read_frame((unsigned char*)image.getMat().data);
     }
     else
 #endif
@@ -267,7 +274,7 @@ VideoCapture& VideoCapture::operator>>(Mat& image)
     {
         image.create(d->height, d->width, CV_8UC3);
 
-        d->cap_cvi.read_frame((unsigned char*)image.data);
+        d->cap_cvi.read_frame((unsigned char*)image.getMat().data);
     }
     else
 #endif
@@ -276,14 +283,14 @@ VideoCapture& VideoCapture::operator>>(Mat& image)
     {
         image.create(d->height, d->width, CV_8UC3);
 
-        d->cap_v4l2.read_frame((unsigned char*)image.data);
+        d->cap_v4l2.read_frame((unsigned char*)image.getMat().data);
     }
     else
 #endif
     {
     }
 
-    return *this;
+    return !image.empty();
 }
 
 bool VideoCapture::set(int propId, double value)

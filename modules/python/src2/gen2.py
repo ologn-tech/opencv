@@ -1310,7 +1310,7 @@ class PythonWrapperGenerator(object):
 
     def gen(self, srcfiles, output_path):
         self.clear()
-        self.parser = hdr_parser.CppHeaderParser(generate_umat_decls=True, generate_gpumat_decls=True)
+        self.parser = hdr_parser.CppHeaderParser(generate_umat_decls=False, generate_gpumat_decls=False)
 
 
         # step 1: scan the headers and build more descriptive maps of classes, consts, functions

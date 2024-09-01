@@ -55,7 +55,9 @@ PyObject *pycvSetMouseCallback(PyObject*, PyObject *args, PyObject *kw)
     {
         registered_callbacks.insert(std::pair<std::string, PyObject*>(std::string(name), py_callback_info));
     }
+#if 0
     ERRWRAP2(setMouseCallback(name, OnMouse, py_callback_info));
+#endif
     Py_RETURN_NONE;
 }
 
@@ -78,6 +80,7 @@ static void OnChange(int pos, void *param)
 }
 
 // workaround for #20408, use nullptr, set value later
+#if 0
 static int _createTrackbar(const String &trackbar_name, const String &window_name, int value, int count,
                     TrackbarCallback onChange, PyObject* py_callback_info)
 {
@@ -85,6 +88,7 @@ static int _createTrackbar(const String &trackbar_name, const String &window_nam
     setTrackbarPos(trackbar_name, window_name, value);
     return n;
 }
+#endif
 
 PyObject *pycvCreateTrackbar(PyObject*, PyObject *args)
 {
@@ -113,7 +117,9 @@ PyObject *pycvCreateTrackbar(PyObject*, PyObject *args)
     {
         registered_callbacks.insert(std::pair<std::string, PyObject*>(name, py_callback_info));
     }
+#if 0
     ERRWRAP2(_createTrackbar(trackbar_name, window_name, value, count, OnChange, py_callback_info));
+#endif
     Py_RETURN_NONE;
 }
 
@@ -177,7 +183,9 @@ PyObject *pycvCreateButton(PyObject*, PyObject *args, PyObject *kw)
     {
         registered_callbacks.insert(std::pair<std::string, PyObject*>(name, py_callback_info));
     }
+#if 0
     ERRWRAP2(createButton(button_name, OnButtonChange, py_callback_info, button_type, initial_button_state != 0));
+#endif
     Py_RETURN_NONE;
 }
 

@@ -75,21 +75,23 @@ class VideoCaptureImpl;
 class CV_EXPORTS_W VideoCapture
 {
 public:
-    VideoCapture();
+    CV_WRAP VideoCapture();
 
     ~VideoCapture();
 
-    bool open(int index);
+    CV_WRAP bool open(int index);
 
-    bool isOpened() const;
+    CV_WRAP bool isOpened() const;
 
-    void release();
+    CV_WRAP void release();
 
-    VideoCapture& operator>>(Mat& bgr_image);
+    VideoCapture& operator>>(Mat& image);
 
-    bool set(int propId, double value);
+    CV_WRAP bool read(OutputArray image);
 
-    double get(int propId) const;
+    CV_WRAP bool set(int propId, double value);
+
+    CV_WRAP double get(int propId) const;
 
 private:
     VideoCaptureImpl* const d;
