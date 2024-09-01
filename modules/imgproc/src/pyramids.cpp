@@ -42,10 +42,8 @@
 //M*/
 
 #include "precomp.hpp"
-#include "opencl_kernels_imgproc.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 
-#include "opencv2/core/openvx/ovx_defs.hpp"
 
 namespace cv
 {
@@ -1677,16 +1675,6 @@ void cv::buildPyramid( InputArray _src, OutputArrayOfArrays _dst, int maxlevel, 
     CV_INSTRUMENT_REGION();
 
     CV_Assert(borderType != BORDER_CONSTANT);
-
-    if (_src.dims() <= 2 && _dst.isUMatVector())
-    {
-        UMat src = _src.getUMat();
-        _dst.create( maxlevel + 1, 1, 0 );
-        _dst.getUMatRef(0) = src;
-        for( int i = 1; i <= maxlevel; i++ )
-            pyrDown( _dst.getUMatRef(i-1), _dst.getUMatRef(i), Size(), borderType );
-        return;
-    }
 
     Mat src = _src.getMat();
     _dst.create( maxlevel + 1, 1, 0 );

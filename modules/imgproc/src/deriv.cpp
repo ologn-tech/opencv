@@ -41,9 +41,7 @@
 //M*/
 
 #include "precomp.hpp"
-#include "opencl_kernels_imgproc.hpp"
 
-#include "opencv2/core/openvx/ovx_defs.hpp"
 #include "filter.hpp"
 
 /****************************************************************************************\

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "opencv2/core/ocl.hpp"
 
 namespace cv
 {

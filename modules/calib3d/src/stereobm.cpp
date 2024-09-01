@@ -49,7 +49,6 @@
 #include <stdio.h>
 #include <limits>
 #include <vector>
-#include "opencl_kernels_calib3d.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 #include "opencv2/core/utils/buffer_area.private.hpp"
 

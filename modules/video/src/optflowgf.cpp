@@ -41,7 +41,6 @@
 //M*/
 
 #include "precomp.hpp"
-#include "opencl_kernels_video.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 
 #if defined __APPLE__ || defined __ANDROID__

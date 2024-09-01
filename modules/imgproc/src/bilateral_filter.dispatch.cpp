@@ -46,7 +46,6 @@
 #include <vector>
 
 #include "opencv2/core/hal/intrin.hpp"
-#include "opencl_kernels_imgproc.hpp"
 
 #include "bilateral_filter.simd.hpp"
 #include "bilateral_filter.simd_declarations.hpp" // defines CV_CPU_DISPATCH_MODES_ALL=AVX2,...,BASELINE based on CMakeLists.txt content

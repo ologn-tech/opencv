@@ -929,4 +929,9 @@ typedef hfloat float16_t;
 #include "opencv2/core/fast_math.hpp" // define cvRound(double)
 #endif
 
+#define CV_OCL_RUN_(condition, func, ...)
+#define CV_OCL_RUN(condition, func) CV_OCL_RUN_(condition, func)
+
+#define CV_OVX_RUN(condition, func, ...)
+
 #endif // OPENCV_CORE_CVDEF_H

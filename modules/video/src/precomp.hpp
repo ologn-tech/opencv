@@ -46,7 +46,6 @@
 #include "opencv2/video.hpp"
 #include "opencv2/core/utility.hpp"
 #include "opencv2/core/private.hpp"
-#include "opencv2/core/ocl.hpp"
 #include "opencv2/core.hpp"
 
 #endif

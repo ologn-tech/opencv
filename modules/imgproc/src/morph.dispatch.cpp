@@ -42,7 +42,6 @@
 
 #include "precomp.hpp"
 #include <limits.h>
-#include "opencl_kernels_imgproc.hpp"
 #include <iostream>
 #include "hal_replacement.hpp"
 #include "opencv2/core/hal/intrin.hpp"

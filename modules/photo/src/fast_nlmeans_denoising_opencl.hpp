@@ -9,7 +9,6 @@
 #ifndef __OPENCV_FAST_NLMEANS_DENOISING_OPENCL_HPP__
 #define __OPENCV_FAST_NLMEANS_DENOISING_OPENCL_HPP__
 
-#include "opencl_kernels_photo.hpp"
 
 #ifdef HAVE_OPENCL
 

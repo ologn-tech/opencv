@@ -93,16 +93,6 @@ void Feature2D::detect( InputArrayOfArrays images,
            detect(images.getMat(i), keypoints[i], masks.empty() ? noArray() : masks.getMat(i));
        }
     }
-    else
-    {
-        // assume UMats
-        for (int i = 0; i < nimages; i++)
-        {
-            detect(images.getUMat(i), keypoints[i], masks.empty() ? noArray() : masks.getUMat(i));
-        }
-    }
-
-
 }
 
 /*
@@ -145,15 +135,6 @@ void Feature2D::compute( InputArrayOfArrays images,
         for (int i = 0; i < nimages; i++)
         {
             compute(images.getMat(i), keypoints[i], vec[i]);
-        }
-    }
-    else if (descriptors.isUMatVector())
-    {
-        vector<UMat>& vec = *(vector<UMat>*)descriptors.getObj();
-        vec.resize(nimages);
-        for (int i = 0; i < nimages; i++)
-        {
-            compute(images.getUMat(i), keypoints[i], vec[i]);
         }
     }
     else

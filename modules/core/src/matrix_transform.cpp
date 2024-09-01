@@ -3,7 +3,6 @@
 // of this distribution and at http://opencv.org/license.html
 
 #include "precomp.hpp"
-#include "opencl_kernels_core.hpp"
 #include "hal_replacement.hpp"
 #include "opencv2/core/detail/dispatch_helper.impl.hpp"
 
@@ -1105,12 +1104,6 @@ void rotate(InputArray _src, OutputArray _dst, int rotateMode)
 {
     CV_Assert(_src.dims() <= 2);
     int angle;
-
-    if (_dst.isUMat())
-    {
-        rotateImpl(_src, _dst, rotateMode);
-        return;
-    }
 
     Mat src = _src.getMat();
     int type = src.type();

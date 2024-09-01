@@ -42,7 +42,6 @@
 
 #include "precomp.hpp"
 
-#include "opencv2/core/opencl/ocl_defs.hpp"
 
 using namespace cv;
 using namespace cv::detail;

@@ -4898,6 +4898,37 @@ CV_EXPORTS_W double getFontScaleFromHeight(const int fontFace,
                                            const int pixelHeight,
                                            const int thickness = 1);
 
+class FontFaceImpl;
+class CV_EXPORTS_W FontFace
+{
+public:
+    FontFace();
+    FontFace(const String& fontPath);
+
+    ~FontFace();
+
+protected:
+    void set_glyph(int count, const unsigned int* unicode, const unsigned char* bitmaps);
+
+public:
+    FontFaceImpl* const d;
+};
+
+enum PutTextFlags
+{
+    PUT_TEXT_ALIGN_LEFT=0,  // put the text to the right from the origin
+    PUT_TEXT_ALIGN_CENTER=1,// center the text at the origin; not implemented yet
+    PUT_TEXT_ALIGN_RIGHT=2, // put the text to the left of the origin
+    PUT_TEXT_ALIGN_MASK=3,  // alignment mask
+    PUT_TEXT_ORIGIN_TL=0,
+    PUT_TEXT_ORIGIN_BL=32,  // treat the target image as having bottom-left origin
+    PUT_TEXT_WRAP=128       // wrap text to the next line if it does not fit
+};
+
+CV_EXPORTS_W Point putText(InputOutputArray img, const String &text, Point org, Scalar color, const FontFace &fface, int size, int weight=0, PutTextFlags flags=PUT_TEXT_ALIGN_LEFT, Range wrap=Range());
+
+CV_EXPORTS_W Rect getTextSize(Size imgsize, const String& text, Point org, const FontFace& fontface, int size, int weight=0, PutTextFlags flags=PUT_TEXT_ALIGN_LEFT, Range wrap=Range());
+
 /** @brief Class for iterating over all pixels on a raster line segment.
 
 The class LineIterator is used to get each pixel of a raster line connecting

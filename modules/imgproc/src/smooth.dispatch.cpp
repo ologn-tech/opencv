@@ -51,9 +51,7 @@
 #include <iostream>
 
 #include "opencv2/core/hal/intrin.hpp"
-#include "opencl_kernels_imgproc.hpp"
 
-#include "opencv2/core/openvx/ovx_defs.hpp"
 
 #include "filter.hpp"
 
@@ -638,9 +636,7 @@ void GaussianBlur(InputArray _src, OutputArray _dst, Size ksize,
     if (sigma2 <= 0)
         sigma2 = sigma1;
 
-    bool useOpenCL = ocl::isOpenCLActivated() && _dst.isUMat() && _src.dims() <= 2 &&
-               _src.rows() >= ksize.height && _src.cols() >= ksize.width &&
-               ksize.width > 1 && ksize.height > 1;
+    bool useOpenCL = false;
     CV_UNUSED(useOpenCL);
 
     int sdepth = CV_MAT_DEPTH(type), cn = CV_MAT_CN(type);

@@ -48,13 +48,8 @@ int cv::meanShift( InputArray _probImage, Rect& window, TermCriteria criteria )
     Size size;
     int cn;
     Mat mat;
-    UMat umat;
-    bool isUMat = _probImage.isUMat();
 
-    if (isUMat)
-        umat = _probImage.getUMat(), cn = umat.channels(), size = umat.size();
-    else
-        mat = _probImage.getMat(), cn = mat.channels(), size = mat.size();
+    mat = _probImage.getMat(), cn = mat.channels(), size = mat.size();
 
     Rect cur_rect = window;
 
@@ -80,7 +75,7 @@ int cv::meanShift( InputArray _probImage, Rect& window, TermCriteria criteria )
         cur_rect.width = std::max(cur_rect.width, 1);
         cur_rect.height = std::max(cur_rect.height, 1);
 
-        Moments m = isUMat ? moments(umat(cur_rect)) : moments(mat(cur_rect));
+        Moments m = moments(mat(cur_rect));
 
         // Calculating center of mass
         if( fabs(m.m00) < DBL_EPSILON )
@@ -115,13 +110,8 @@ cv::RotatedRect cv::CamShift( InputArray _probImage, Rect& window,
     const int TOLERANCE = 10;
     Size size;
     Mat mat;
-    UMat umat;
-    bool isUMat = _probImage.isUMat();
 
-    if (isUMat)
-        umat = _probImage.getUMat(), size = umat.size();
-    else
-        mat = _probImage.getMat(), size = mat.size();
+    mat = _probImage.getMat(), size = mat.size();
 
     meanShift( _probImage, window, criteria );
 
@@ -142,7 +132,7 @@ cv::RotatedRect cv::CamShift( InputArray _probImage, Rect& window,
         window.height = size.height - window.y;
 
     // Calculating moments in new center mass
-    Moments m = isUMat ? moments(umat(window)) : moments(mat(window));
+    Moments m = moments(mat(window));
 
     double m00 = m.m00, m10 = m.m10, m01 = m.m01;
     double mu11 = m.mu11, mu20 = m.mu20, mu02 = m.mu02;

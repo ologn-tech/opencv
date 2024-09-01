@@ -8,7 +8,6 @@
 #include <opencv2/core/utils/trace.private.hpp>
 #include <opencv2/core/utils/configuration.private.hpp>
 
-#include <opencv2/core/opencl/ocl_defs.hpp>
 
 #include <cstdarg> // va_start
 

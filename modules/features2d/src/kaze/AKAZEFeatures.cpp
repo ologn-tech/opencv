@@ -11,7 +11,6 @@
 #include "fed.h"
 #include "nldiffusion_functions.h"
 #include "utils.h"
-#include "opencl_kernels_features2d.hpp"
 
 #include <iostream>
 
@@ -520,15 +519,7 @@ convertScalePyramid(const std::vector<Evolution<MatTypeSrc> >& src, std::vector<
  */
 void AKAZEFeatures::Create_Nonlinear_Scale_Space(InputArray image)
 {
-  if (ocl::isOpenCLActivated() && image.isUMat()) {
-    // will run OCL version of scale space pyramid
-    UMatPyramid uPyr;
-    // init UMat pyramid with sizes
-    convertScalePyramid(evolution_, uPyr);
-    create_nonlinear_scale_space(image, options_, tsteps_, uPyr);
-    // download pyramid from GPU
-    convertScalePyramid(uPyr, evolution_);
-  } else {
+  {
     // CPU version
     create_nonlinear_scale_space(image, options_, tsteps_, evolution_);
   }
@@ -639,19 +630,6 @@ private:
   std::vector<Evolution<MatType> >*  evolution_;
 };
 
-
-/**
- * @brief This method computes the feature detector response for the nonlinear scale space
- * @details OCL version
- * @note We use the Hessian determinant as the feature detector response
- */
-static inline void
-Compute_Determinant_Hessian_Response(UMatPyramid &evolution) {
-  CV_INSTRUMENT_REGION();
-
-  DeterminantHessianResponse<UMat> body (evolution);
-  body(Range(0, (int)evolution.size()));
-}
 
 /**
  * @brief This method computes the feature detector response for the nonlinear scale space

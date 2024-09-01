@@ -60,7 +60,6 @@ std::shared_ptr<ParallelForAPI> createParallelForAPI()
             }
             isKnown = true;
         }
-        try
         {
             CV_LOG_DEBUG(NULL, "core(parallel): trying backend: " << info.name << " (priority=" << info.priority << ")");
             if (!info.backendFactory)
@@ -78,14 +77,6 @@ std::shared_ptr<ParallelForAPI> createParallelForAPI()
             g_initializedParallelForAPI = true;
             getParallelBackendName() = info.name;
             return backend;
-        }
-        catch (const std::exception& e)
-        {
-            CV_LOG_WARNING(NULL, "core(parallel): can't initialize " << info.name << " backend: " << e.what());
-        }
-        catch (...)
-        {
-            CV_LOG_WARNING(NULL, "core(parallel): can't initialize " << info.name << " backend: Unknown C++ exception");
         }
     }
     if (name.empty())

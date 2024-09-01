@@ -44,7 +44,6 @@
 #define OPENCV_STITCHING_WARPERS_HPP
 
 #include "opencv2/core.hpp"
-#include "opencv2/core/cuda.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/opencv_modules.hpp"
 

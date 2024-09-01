@@ -42,7 +42,6 @@
 //M*/
 
 #include "precomp.hpp"
-#include "opencl_kernels_imgproc.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 #include <algorithm>
 #include <iterator>
@@ -2266,7 +2265,7 @@ static void HoughCircles( InputArray _image, OutputArray _circles,
         CV_CheckType(type, type == CV_32FC3 || type == CV_32FC4, "Wrong type of output circles");
     }
 
-    CV_Assert(!_image.empty() && _image.type() == CV_8UC1 && (_image.isMat() || _image.isUMat()));
+    CV_Assert(!_image.empty() && _image.type() == CV_8UC1 && (_image.isMat()));
 
     if( dp <= 0 || minDist <= 0 || param1 <= 0)
         CV_Error( Error::StsOutOfRange, "dp, min_dist and canny_threshold must be all positive numbers" );

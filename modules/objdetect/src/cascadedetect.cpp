@@ -44,7 +44,6 @@
 #include <iostream>
 
 #include "cascadedetect.hpp"
-#include "opencl_kernels_objdetect.hpp"
 
 #if defined(_MSC_VER)
 #  pragma warning(disable:4458)  // declaration of 'origWinSize' hides class member

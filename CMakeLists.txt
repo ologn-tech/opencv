@@ -1076,20 +1076,12 @@ ocv_add_modules_compiler_options()
 ocv_register_modules()
 
 # Generate targets for documentation
-add_subdirectory(doc)
 
 # various data that is used by cv libraries and/or demo applications.
-add_subdirectory(data)
 
 # extra applications
-if(BUILD_opencv_apps)
-  add_subdirectory(apps)
-endif()
 
 # examples
-if(BUILD_EXAMPLES OR BUILD_ANDROID_EXAMPLES OR INSTALL_ANDROID_EXAMPLES OR INSTALL_PYTHON_EXAMPLES OR INSTALL_C_EXAMPLES)
-  add_subdirectory(samples)
-endif()
 
 # ----------------------------------------------------------------------------
 # Finalization: generate configuration-based files
@@ -1101,20 +1093,13 @@ ocv_cmake_hook(PRE_FINALIZE)
 include(cmake/OpenCVGenHeaders.cmake)
 
 # Generate opencv.pc for pkg-config command
-if(OPENCV_GENERATE_PKGCONFIG)
-  include(cmake/OpenCVGenPkgconfig.cmake)
-endif()
 
 # Generate OpenCV.mk for ndk-build (Android build tool)
-include(cmake/OpenCVGenAndroidMK.cmake)
 
 # Generate OpenCVConfig.cmake and OpenCVConfig-version.cmake for cmake projects
 include(cmake/OpenCVGenConfig.cmake)
 
 # Generate Info.plist for the iOS/visionOS framework
-if(APPLE_FRAMEWORK)
-  include(cmake/OpenCVGenInfoPlist.cmake)
-endif()
 
 # Generate ABI descriptor
 include(cmake/OpenCVGenABI.cmake)
@@ -1140,12 +1125,6 @@ if(INSTALL_TESTS AND OPENCV_TEST_DATA_PATH)
   endif()
 endif()
 
-if(NOT OPENCV_README_FILE)
-  if(ANDROID)
-    set(OPENCV_README_FILE ${CMAKE_CURRENT_SOURCE_DIR}/platforms/android/README.android)
-  endif()
-endif()
-
 if(NOT OPENCV_LICENSE_FILE)
   set(OPENCV_LICENSE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE)
 endif()
@@ -1155,11 +1134,6 @@ if(ANDROID OR NOT UNIX)
   install(FILES ${OPENCV_LICENSE_FILE}
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
         DESTINATION ./ COMPONENT libs)
-  if(OPENCV_README_FILE)
-    install(FILES ${OPENCV_README_FILE}
-            PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-            DESTINATION ./ COMPONENT libs)
-  endif()
 endif()
 
 if(COMMAND ocv_pylint_finalize)

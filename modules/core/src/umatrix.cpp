@@ -40,21 +40,12 @@
 //M*/
 
 #include "precomp.hpp"
-#include "opencl_kernels_core.hpp"
-#include "umatrix.hpp"
 
 #include <opencv2/core/utils/tls.hpp>
 
 ///////////////////////////////// UMat implementation ///////////////////////////////
 
 namespace cv {
-
-// forward decls, implementation is below in this file
-void setSize(UMat& m, int _dims, const int* _sz, const size_t* _steps,
-             bool autoSteps = false);
-
-void updateContinuityFlag(UMat& m);
-void finalizeHdr(UMat& m);
 
 UMatData::UMatData(const MatAllocator* allocator)
 {
@@ -127,6 +118,7 @@ UMatData::~UMatData()
     }
 }
 
+#if 0
 #ifndef OPENCV_DISABLE_THREAD_SUPPORT
 
 // it should be a prime number for the best hash function
@@ -602,13 +594,8 @@ UMat Mat::getUMat(AccessFlag accessFlags, UMatUsageFlags usageFlags) const
         new_u->originalUMatData = u;
     }
     bool allocated = false;
-    try
     {
         allocated = UMat::getStdAllocator()->allocate(new_u, accessFlags, usageFlags);
-    }
-    catch (const cv::Exception& e)
-    {
-        fprintf(stderr, "Exception: %s\n", e.what());
     }
     if (!allocated)
     {
@@ -626,7 +613,6 @@ UMat Mat::getUMat(AccessFlag accessFlags, UMatUsageFlags usageFlags) const
         CV_XADD(&(u->refcount), 1);
         CV_XADD(&(u->urefcount), 1);
     }
-    try
     {
         hdr.flags = flags;
         hdr.usageFlags = usageFlags;
@@ -636,16 +622,6 @@ UMat Mat::getUMat(AccessFlag accessFlags, UMatUsageFlags usageFlags) const
         hdr.offset = 0; //data - datastart;
         hdr.addref();
         return hdr;
-    }
-    catch(...)
-    {
-        if (u != NULL)
-        {
-            CV_XADD(&(u->refcount), -1);
-            CV_XADD(&(u->urefcount), -1);
-        }
-        new_u->currAllocator->deallocate(new_u);
-        throw;
     }
 
 }
@@ -698,15 +674,8 @@ void UMat::create(int d, const int* _sizes, int _type, UMatUsageFlags _usageFlag
             a = a0;
             a0 = Mat::getDefaultAllocator();
         }
-        try
         {
             u = a->allocate(dims, size, _type, 0, step.p, ACCESS_RW /* ignored */, usageFlags);
-            CV_Assert(u != 0);
-        }
-        catch(...)
-        {
-            if(a != a0)
-                u = a0->allocate(dims, size, _type, 0, step.p, ACCESS_RW /* ignored */, usageFlags);
             CV_Assert(u != 0);
         }
         CV_Assert( step[dims-1] == (size_t)CV_ELEM_SIZE(flags) );
@@ -1075,7 +1044,6 @@ Mat UMat::getMat(AccessFlag accessFlags) const
     // TODO Support ACCESS_READ (ACCESS_WRITE) without unnecessary data transfers
     accessFlags |= ACCESS_RW;
     UMatDataAutoLock autolock(u);
-    try
     {
         if(CV_XADD(&u->refcount, 1) == 0)
             u->currAllocator->map(u, accessFlags);
@@ -1089,11 +1057,6 @@ Mat UMat::getMat(AccessFlag accessFlags) const
             hdr.datalimit = hdr.dataend = u->data + u->size;
             return hdr;
         }
-    }
-    catch(...)
-    {
-        CV_XADD(&u->refcount, -1);
-        throw;
     }
     CV_XADD(&u->refcount, -1);
     CV_Assert(u->data != 0 && "Error mapping of UMat to host memory.");
@@ -1339,6 +1302,7 @@ UMat UMat::ones(int ndims, const int* sz, int type, UMatUsageFlags usageFlags)
 {
     return UMat(ndims, sz, type, Scalar(1), usageFlags);
 }
+#endif
 
 }
 

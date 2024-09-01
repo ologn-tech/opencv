@@ -52,14 +52,9 @@
 
 #include "opencv2/core/utility.hpp"
 #include "opencv2/core/core_c.h"
-#include "opencv2/core/cuda.hpp"
-#include "opencv2/core/opengl.hpp"
-#include "opencv2/core/va_intel.hpp"
 
 #include "opencv2/core/private.hpp"
-#include "opencv2/core/private.cuda.hpp"
 #ifdef HAVE_OPENCL
-#include "opencv2/core/ocl.hpp"
 #endif
 
 #include <ctype.h>
@@ -348,9 +343,6 @@ struct ImplCollector
 struct CoreTLSData
 {
     CoreTLSData() :
-//#ifdef HAVE_OPENCL
-        oclExecutionContextInitialized(false), useOpenCL(-1),
-//#endif
         useIPP(-1),
         useIPP_NE(-1)
 #ifdef HAVE_OPENVX
@@ -359,11 +351,6 @@ struct CoreTLSData
     {}
 
     RNG rng;
-//#ifdef HAVE_OPENCL
-    ocl::OpenCLExecutionContext oclExecutionContext;
-    bool oclExecutionContextInitialized;
-    int useOpenCL; // 1 - use, 0 - do not use, -1 - auto/not initialized
-//#endif
     int useIPP;    // 1 - use, 0 - do not use, -1 - auto/not initialized
     int useIPP_NE; // 1 - use, 0 - do not use, -1 - auto/not initialized
 #ifdef HAVE_OPENVX

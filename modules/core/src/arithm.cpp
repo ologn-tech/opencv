@@ -48,7 +48,6 @@
 // */
 
 #include "precomp.hpp"
-#include "opencl_kernels_core.hpp"
 
 namespace cv
 {
@@ -412,22 +411,6 @@ void cv::max(const Mat& src1, const Mat& src2, Mat& dst)
 }
 
 void cv::min(const Mat& src1, const Mat& src2, Mat& dst)
-{
-    CV_INSTRUMENT_REGION();
-
-    OutputArray _dst(dst);
-    binary_op(src1, src2, _dst, noArray(), getMinTab(), false, OCL_OP_MIN );
-}
-
-void cv::max(const UMat& src1, const UMat& src2, UMat& dst)
-{
-    CV_INSTRUMENT_REGION();
-
-    OutputArray _dst(dst);
-    binary_op(src1, src2, _dst, noArray(), getMaxTab(), false, OCL_OP_MAX );
-}
-
-void cv::min(const UMat& src1, const UMat& src2, UMat& dst)
 {
     CV_INSTRUMENT_REGION();
 
@@ -1140,13 +1123,6 @@ void divide(double scale, InputArray src2,
     CV_INSTRUMENT_REGION();
 
     arithm_op(src2, src2, dst, noArray(), dtype, getRecipTab(), true, &scale, OCL_OP_RECIP_SCALE);
-}
-
-UMat UMat::mul(InputArray m, double scale) const
-{
-    UMat dst;
-    multiply(*this, m, dst, scale);
-    return dst;
 }
 
 /****************************************************************************************\

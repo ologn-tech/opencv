@@ -48,11 +48,9 @@
 // */
 
 #include "precomp.hpp"
-#include "opencl_kernels_imgproc.hpp"
 #include "hal_replacement.hpp"
 #include <opencv2/core/utils/configuration.private.hpp>
 #include "opencv2/core/hal/intrin.hpp"
-#include "opencv2/core/openvx/ovx_defs.hpp"
 #include "opencv2/core/softfloat.hpp"
 #include "imgwarp.hpp"
 

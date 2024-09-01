@@ -42,7 +42,6 @@
 
 #include "test_precomp.hpp"
 
-#include "opencv2/photo/cuda.hpp"
 #include "opencv2/ts/cuda_test.hpp"
 
 #include "opencv2/opencv_modules.hpp"

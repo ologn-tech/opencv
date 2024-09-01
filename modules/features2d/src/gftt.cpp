@@ -122,18 +122,6 @@ public:
         std::vector<Point2f> corners;
         std::vector<float> cornersQuality;
 
-        if (_image.isUMat())
-        {
-            UMat ugrayImage;
-            if( _image.type() != CV_8U )
-                cvtColor( _image, ugrayImage, COLOR_BGR2GRAY );
-            else
-                ugrayImage = _image.getUMat();
-
-            goodFeaturesToTrack( ugrayImage, corners, nfeatures, qualityLevel, minDistance, _mask,
-                                 cornersQuality, blockSize, gradSize, useHarrisDetector, k );
-        }
-        else
         {
             Mat image = _image.getMat(), grayImage = image;
             if( image.type() != CV_8U )

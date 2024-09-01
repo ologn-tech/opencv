@@ -55,7 +55,6 @@
 #include <iostream>
 #include <cmath>
 #include "opencv2/core.hpp"
-#include "opencv2/core/ocl.hpp"
 #include "opencv2/core/utility.hpp"
 #include "opencv2/stitching.hpp"
 #include "opencv2/stitching/detail/autocalib.hpp"

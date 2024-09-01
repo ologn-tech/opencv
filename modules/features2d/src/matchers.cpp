@@ -44,7 +44,6 @@
 #include "opencv2/flann/miniflann.hpp"
 #endif
 #include <limits>
-#include "opencl_kernels_features2d.hpp"
 
 #if defined(HAVE_EIGEN) && EIGEN_WORLD_VERSION == 2
 #  if defined(_MSC_VER)
@@ -529,18 +528,7 @@ DescriptorMatcher::~DescriptorMatcher()
 
 void DescriptorMatcher::add( InputArrayOfArrays _descriptors )
 {
-    if( _descriptors.isUMatVector() )
-    {
-        std::vector<UMat> descriptors;
-        _descriptors.getUMatVector( descriptors );
-        utrainDescCollection.insert( utrainDescCollection.end(), descriptors.begin(), descriptors.end() );
-    }
-    else if( _descriptors.isUMat() )
-    {
-        std::vector<UMat> descriptors = std::vector<UMat>(1, _descriptors.getUMat());
-        utrainDescCollection.insert( utrainDescCollection.end(), descriptors.begin(), descriptors.end() );
-    }
-    else if( _descriptors.isMatVector() )
+    if( _descriptors.isMatVector() )
     {
         std::vector<Mat> descriptors;
         _descriptors.getMatVector(descriptors);
@@ -553,7 +541,7 @@ void DescriptorMatcher::add( InputArrayOfArrays _descriptors )
     }
     else
     {
-        CV_Assert( _descriptors.isUMat() || _descriptors.isUMatVector() || _descriptors.isMat() || _descriptors.isMatVector() );
+        CV_Assert( _descriptors.isMat() || _descriptors.isMatVector() );
     }
 }
 
@@ -564,13 +552,12 @@ const std::vector<Mat>& DescriptorMatcher::getTrainDescriptors() const
 
 void DescriptorMatcher::clear()
 {
-    utrainDescCollection.clear();
     trainDescCollection.clear();
 }
 
 bool DescriptorMatcher::empty() const
 {
-    return trainDescCollection.empty() && utrainDescCollection.empty();
+    return trainDescCollection.empty();
 }
 
 void DescriptorMatcher::train()
@@ -625,17 +612,16 @@ void DescriptorMatcher::checkMasks( InputArrayOfArrays _masks, int queryDescript
     if( isMaskSupported() && !masks.empty() )
     {
         // Check masks
-        const size_t imageCount = std::max(trainDescCollection.size(), utrainDescCollection.size() );
+        const size_t imageCount = trainDescCollection.size();
         CV_Assert( masks.size() == imageCount );
         for( size_t i = 0; i < imageCount; i++ )
         {
             if (masks[i].empty())
                 continue;
             const bool hasTrainDesc = !trainDescCollection.empty() && !trainDescCollection[i].empty();
-            const bool hasUTrainDesc = !utrainDescCollection.empty() && !utrainDescCollection[i].empty();
-            if (hasTrainDesc || hasUTrainDesc)
+            if (hasTrainDesc)
             {
-                const int rows = hasTrainDesc ? trainDescCollection[i].rows : utrainDescCollection[i].rows;
+                const int rows = trainDescCollection[i].rows;
                 CV_Assert(masks[i].type() == CV_8UC1
                     && masks[i].rows == queryDescriptorsCount
                     && masks[i].cols == rows);
@@ -757,13 +743,13 @@ static bool ocl_knnMatch(InputArray query, InputArray _train, std::vector< std::
 void BFMatcher::knnMatchImpl( InputArray _queryDescriptors, std::vector<std::vector<DMatch> >& matches, int knn,
                              InputArrayOfArrays _masks, bool compactResult )
 {
-    int trainDescType = trainDescCollection.empty() ? utrainDescCollection[0].type() : trainDescCollection[0].type();
+    int trainDescType = trainDescCollection[0].type();
     CV_Assert( _queryDescriptors.type() == trainDescType );
 
     const int IMGIDX_SHIFT = 18;
     const int IMGIDX_ONE = (1 << IMGIDX_SHIFT);
 
-    if( _queryDescriptors.empty() || (trainDescCollection.empty() && utrainDescCollection.empty()))
+    if( _queryDescriptors.empty() || (trainDescCollection.empty()))
     {
         matches.clear();
         return;
@@ -771,17 +757,6 @@ void BFMatcher::knnMatchImpl( InputArray _queryDescriptors, std::vector<std::vec
 
     std::vector<Mat> masks;
     _masks.getMatVector(masks);
-
-    if(!trainDescCollection.empty() && !utrainDescCollection.empty())
-    {
-        for(int i = 0; i < (int)utrainDescCollection.size(); i++)
-        {
-            Mat tempMat;
-            utrainDescCollection[i].copyTo(tempMat);
-            trainDescCollection.push_back(tempMat);
-        }
-        utrainDescCollection.clear();
-    }
 
 #ifdef HAVE_OPENCL
     int trainDescVectorSize = trainDescCollection.empty() ? (int)utrainDescCollection.size() : (int)trainDescCollection.size();
@@ -834,16 +809,6 @@ void BFMatcher::knnMatchImpl( InputArray _queryDescriptors, std::vector<std::vec
 #endif
 
     Mat queryDescriptors = _queryDescriptors.getMat();
-    if(trainDescCollection.empty() && !utrainDescCollection.empty())
-    {
-        for(int i = 0; i < (int)utrainDescCollection.size(); i++)
-        {
-            Mat tempMat;
-            utrainDescCollection[i].copyTo(tempMat);
-            trainDescCollection.push_back(tempMat);
-        }
-        utrainDescCollection.clear();
-    }
 
     matches.reserve(queryDescriptors.rows);
 
@@ -908,10 +873,10 @@ static bool ocl_radiusMatch(InputArray query, InputArray _train, std::vector< st
 void BFMatcher::radiusMatchImpl( InputArray _queryDescriptors, std::vector<std::vector<DMatch> >& matches,
                                 float maxDistance, InputArrayOfArrays _masks, bool compactResult )
 {
-    int trainDescType = trainDescCollection.empty() ? utrainDescCollection[0].type() : trainDescCollection[0].type();
+    int trainDescType = trainDescCollection[0].type();
     CV_Assert( _queryDescriptors.type() == trainDescType );
 
-    if( _queryDescriptors.empty() || (trainDescCollection.empty() && utrainDescCollection.empty()))
+    if( _queryDescriptors.empty() || (trainDescCollection.empty()))
     {
         matches.clear();
         return;
@@ -919,17 +884,6 @@ void BFMatcher::radiusMatchImpl( InputArray _queryDescriptors, std::vector<std::
 
     std::vector<Mat> masks;
     _masks.getMatVector(masks);
-
-    if(!trainDescCollection.empty() && !utrainDescCollection.empty())
-    {
-        for(int i = 0; i < (int)utrainDescCollection.size(); i++)
-        {
-            Mat tempMat;
-            utrainDescCollection[i].copyTo(tempMat);
-            trainDescCollection.push_back(tempMat);
-        }
-        utrainDescCollection.clear();
-    }
 
 #ifdef HAVE_OPENCL
     int trainDescVectorSize = trainDescCollection.empty() ? (int)utrainDescCollection.size() : (int)trainDescCollection.size();
@@ -960,16 +914,6 @@ void BFMatcher::radiusMatchImpl( InputArray _queryDescriptors, std::vector<std::
 #endif
 
     Mat queryDescriptors = _queryDescriptors.getMat();
-    if(trainDescCollection.empty() && !utrainDescCollection.empty())
-    {
-        for(int i = 0; i < (int)utrainDescCollection.size(); i++)
-        {
-            Mat tempMat;
-            utrainDescCollection[i].copyTo(tempMat);
-            trainDescCollection.push_back(tempMat);
-        }
-        utrainDescCollection.clear();
-    }
 
     matches.resize(queryDescriptors.rows);
     Mat dist, distf;
@@ -1163,13 +1107,6 @@ void FlannBasedMatcher::train()
 
     if( !flannIndex || mergedDescriptors.size() < addedDescCount )
     {
-        // FIXIT: Workaround for 'utrainDescCollection' issue (PR #2142)
-        if (!utrainDescCollection.empty())
-        {
-            CV_Assert(trainDescCollection.size() == 0);
-            for (size_t i = 0; i < utrainDescCollection.size(); ++i)
-                trainDescCollection.push_back(utrainDescCollection[i].getMat(ACCESS_READ));
-        }
         mergedDescriptors.set( trainDescCollection );
         flannIndex = makePtr<flann::Index>( mergedDescriptors.getDescriptors(), *indexParams );
     }

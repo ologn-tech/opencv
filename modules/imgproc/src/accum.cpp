@@ -42,12 +42,10 @@
 //M*/
 
 #include "precomp.hpp"
-#include "opencl_kernels_imgproc.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 #define CV_CPU_OPTIMIZATION_DECLARATIONS_ONLY
 #include "accum.simd.hpp"
 #include "accum.simd_declarations.hpp"
-#include "opencv2/core/openvx/ovx_defs.hpp"
 
 namespace cv
 {

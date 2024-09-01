@@ -1017,13 +1017,6 @@ double invert( InputArray _src, OutputArray _dst, int method )
     return result;
 }
 
-UMat UMat::inv(int method) const
-{
-    UMat m;
-    invert(*this, m, method);
-    return m;
-}
-
 
 /****************************************************************************************\
 *                              Solving a linear system                                   *

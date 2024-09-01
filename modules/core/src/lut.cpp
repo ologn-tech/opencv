@@ -4,9 +4,7 @@
 
 
 #include "precomp.hpp"
-#include "opencl_kernels_core.hpp"
 #include "convert.hpp"
-#include "opencv2/core/openvx/ovx_defs.hpp"
 
 /****************************************************************************************\
 *                                    LUT Transform                                       *

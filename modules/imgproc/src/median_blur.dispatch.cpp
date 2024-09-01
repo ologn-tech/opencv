@@ -46,9 +46,7 @@
 #include <vector>
 
 #include "opencv2/core/hal/intrin.hpp"
-#include "opencl_kernels_imgproc.hpp"
 
-#include "opencv2/core/openvx/ovx_defs.hpp"
 
 #include "median_blur.simd.hpp"
 #include "median_blur.simd_declarations.hpp" // defines CV_CPU_DISPATCH_MODES_ALL=AVX2,...,BASELINE based on CMakeLists.txt content

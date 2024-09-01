@@ -4,7 +4,6 @@
 
 
 #include "precomp.hpp"
-#include "opencl_kernels_core.hpp"
 #include "convert.hpp"
 
 /****************************************************************************************\
@@ -283,12 +282,10 @@ void cv::mixChannels(InputArrayOfArrays src, InputOutputArrayOfArrays dst,
 
     bool src_is_mat = src.kind() != _InputArray::STD_VECTOR_MAT &&
             src.kind() != _InputArray::STD_ARRAY_MAT &&
-            src.kind() != _InputArray::STD_VECTOR_VECTOR &&
-            src.kind() != _InputArray::STD_VECTOR_UMAT;
+            src.kind() != _InputArray::STD_VECTOR_VECTOR;
     bool dst_is_mat = dst.kind() != _InputArray::STD_VECTOR_MAT &&
             dst.kind() != _InputArray::STD_ARRAY_MAT &&
-            dst.kind() != _InputArray::STD_VECTOR_VECTOR &&
-            dst.kind() != _InputArray::STD_VECTOR_UMAT;
+            dst.kind() != _InputArray::STD_VECTOR_VECTOR;
     int i;
     int nsrc = src_is_mat ? 1 : (int)src.total();
     int ndst = dst_is_mat ? 1 : (int)dst.total();
@@ -316,12 +313,10 @@ void cv::mixChannels(InputArrayOfArrays src, InputOutputArrayOfArrays dst,
 
     bool src_is_mat = src.kind() != _InputArray::STD_VECTOR_MAT &&
             src.kind() != _InputArray::STD_ARRAY_MAT &&
-            src.kind() != _InputArray::STD_VECTOR_VECTOR &&
-            src.kind() != _InputArray::STD_VECTOR_UMAT;
+            src.kind() != _InputArray::STD_VECTOR_VECTOR;
     bool dst_is_mat = dst.kind() != _InputArray::STD_VECTOR_MAT &&
             dst.kind() != _InputArray::STD_ARRAY_MAT &&
-            dst.kind() != _InputArray::STD_VECTOR_VECTOR &&
-            dst.kind() != _InputArray::STD_VECTOR_UMAT;
+            dst.kind() != _InputArray::STD_VECTOR_VECTOR;
     int i;
     int nsrc = src_is_mat ? 1 : (int)src.total();
     int ndst = dst_is_mat ? 1 : (int)dst.total();

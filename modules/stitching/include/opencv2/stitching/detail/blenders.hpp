@@ -48,7 +48,6 @@
 #endif
 
 #include "opencv2/core.hpp"
-#include "opencv2/core/cuda.hpp"
 
 namespace cv {
 namespace detail {

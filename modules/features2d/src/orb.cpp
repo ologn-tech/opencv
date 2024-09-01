@@ -35,7 +35,6 @@
 /** Authors: Ethan Rublee, Vincent Rabaud, Gary Bradski */
 
 #include "precomp.hpp"
-#include "opencl_kernels_features2d.hpp"
 #include <iterator>
 
 #ifndef CV_IMPL_ADD
@@ -824,10 +823,8 @@ static void uploadORBKeypoints(const std::vector<KeyPoint>& src,
  * @param keypoints the resulting keypoints, clustered per level
  */
 static void computeKeyPoints(const Mat& imagePyramid,
-                             const UMat& uimagePyramid,
                              const Mat& maskPyramid,
                              const std::vector<Rect>& layerInfo,
-                             const UMat& ulayerInfo,
                              const std::vector<float>& layerScale,
                              std::vector<KeyPoint>& allKeypoints,
                              int nfeatures, double scaleFactor,
@@ -835,7 +832,7 @@ static void computeKeyPoints(const Mat& imagePyramid,
                              bool useOCL, int fastThreshold  )
 {
 #ifndef HAVE_OPENCL
-    CV_UNUSED(uimagePyramid);CV_UNUSED(ulayerInfo);CV_UNUSED(useOCL);
+    CV_UNUSED(useOCL);
 #endif
 
     int i, nkeypoints, level, nlevels = (int)layerInfo.size();
@@ -919,7 +916,6 @@ static void computeKeyPoints(const Mat& imagePyramid,
         return;
     }
     Mat responses;
-    UMat ukeypoints, uresponses(1, nkeypoints, CV_32F);
 
     // Select best features using the Harris cornerness (better scoring than FAST)
     if( scoreType == ORB_Impl::HARRIS_SCORE )
@@ -1070,7 +1066,6 @@ void ORB_Impl::detectAndCompute( InputArray _image, InputArray _mask,
     std::vector<int> layerOfs(nLevels);
     std::vector<float> layerScale(nLevels);
     Mat imagePyramid, maskPyramid;
-    UMat uimagePyramid, ulayerInfo;
 
     float level0_inv_scale = 1.0f / getScale(0, firstLevel, scaleFactor);
     size_t level0_width = (size_t)cvRound(image.cols * level0_inv_scale);
@@ -1154,17 +1149,11 @@ void ORB_Impl::detectAndCompute( InputArray _image, InputArray _mask,
         }
     }
 
-    if( useOCL )
-        copyVectorToUMat(layerOfs, ulayerInfo);
-
     if( do_keypoints )
     {
-        if( useOCL )
-            imagePyramid.copyTo(uimagePyramid);
-
         // Get keypoints, those will be far enough from the border that no check will be required for the descriptor
-        computeKeyPoints(imagePyramid, uimagePyramid, maskPyramid,
-                         layerInfo, ulayerInfo, layerScale, keypoints,
+        computeKeyPoints(imagePyramid, maskPyramid,
+                         layerInfo, layerScale, keypoints,
                          nfeatures, scaleFactor, edgeThreshold, patchSize, scoreType, useOCL, fastThreshold);
     }
     else

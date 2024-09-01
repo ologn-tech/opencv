@@ -1760,7 +1760,6 @@ cvFindContours_Impl( void*  img,  CvMemStorage*  storage,
     }
     else
     {
-        try
         {
             scanner = cvStartFindContours_Impl( img, storage, cntHeaderSize, mode, method, offset,
                                             needFillBorder);
@@ -1771,12 +1770,6 @@ cvFindContours_Impl( void*  img,  CvMemStorage*  storage,
                 contour = cvFindNextContour( scanner );
             }
             while( contour != 0 );
-        }
-        catch(...)
-        {
-            if( scanner )
-                cvEndFindContours(&scanner);
-            throw;
         }
 
         *firstContour = cvEndFindContours( &scanner );
@@ -1820,8 +1813,7 @@ void cv::findContours_legacy( InputArray _image, OutputArrayOfArrays _contours,
     CV_INSTRUMENT_REGION();
 
     // Sanity check: output must be of type vector<vector<Point>>
-    CV_Assert((_contours.kind() == _InputArray::STD_VECTOR_VECTOR || _contours.kind() == _InputArray::STD_VECTOR_MAT ||
-                _contours.kind() == _InputArray::STD_VECTOR_UMAT));
+    CV_Assert((_contours.kind() == _InputArray::STD_VECTOR_VECTOR || _contours.kind() == _InputArray::STD_VECTOR_MAT));
 
     CV_Assert(_contours.empty() || (_contours.channels() == 2 && _contours.depth() == CV_32S));
 

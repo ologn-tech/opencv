@@ -698,16 +698,8 @@ void Mat::create(int d, const int* _sizes, int _type)
 #endif
         if(!a)
             a = a0;
-        try
         {
             u = a->allocate(dims, size, _type, 0, step.p, ACCESS_RW /* ignored */, USAGE_DEFAULT);
-            CV_Assert(u != 0);
-        }
-        catch (...)
-        {
-            if (a == a0)
-                throw;
-            u = a0->allocate(dims, size, _type, 0, step.p, ACCESS_RW /* ignored */, USAGE_DEFAULT);
             CV_Assert(u != 0);
         }
         CV_Assert( step[dims-1] == (size_t)CV_ELEM_SIZE(flags) );
@@ -759,7 +751,6 @@ Mat::Mat(const Mat& m, const Range& _rowRange, const Range& _colRange)
     }
 
     *this = m;
-    try
     {
         if( _rowRange != Range::all() && _rowRange != Range(0,rows) )
         {
@@ -778,11 +769,6 @@ Mat::Mat(const Mat& m, const Range& _rowRange, const Range& _colRange)
             data += _colRange.start*elemSize();
             flags |= SUBMATRIX_FLAG;
         }
-    }
-    catch(...)
-    {
-        release();
-        throw;
     }
 
     updateContinuityFlag();

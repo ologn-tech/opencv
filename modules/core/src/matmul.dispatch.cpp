@@ -44,11 +44,6 @@
 #include "precomp.hpp"
 #include <opencv2/core/utils/logger.hpp>
 
-#include "opencl_kernels_core.hpp"
-#include "opencv2/core/opencl/runtime/opencl_clblas.hpp"
-#include "opencv2/core/opencl/runtime/opencl_core.hpp"
-#include "intel_gpu_gemm.inl.hpp"
-
 #include "matmul.simd.hpp"
 #include "matmul.simd_declarations.hpp" // defines CV_CPU_DISPATCH_MODES_ALL=AVX2,...,BASELINE based on CMakeLists.txt content
 
@@ -1072,20 +1067,6 @@ static bool ocl_dot( InputArray _src1, InputArray _src2, double & res )
 }
 
 #endif
-
-double UMat::dot(InputArray m) const
-{
-    CV_INSTRUMENT_REGION();
-
-    CV_Assert(m.sameSize(*this) && m.type() == type());
-
-#ifdef HAVE_OPENCL
-    double r = 0;
-    CV_OCL_RUN_(dims <= 2, ocl_dot(*this, m, r), r)
-#endif
-
-    return getMat(ACCESS_READ).dot(m);
-}
 
 }  // namespace cv::
 

@@ -47,8 +47,6 @@
 #define CV_LOG_STRIP_LEVEL CV_LOG_LEVEL_DEBUG + 1
 #include <opencv2/core/utils/logger.hpp>
 
-#include "opencv2/core/opencl/ocl_defs.hpp"
-#include "opencl_kernels_imgproc.hpp"
 #include "hal_replacement.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 #include "filter.hpp"

@@ -41,7 +41,6 @@
 //M*/
 
 #include "precomp.hpp"
-#include "opencv2/core/private.cuda.hpp"
 
 using namespace cv;
 using namespace cv::cuda;

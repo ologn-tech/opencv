@@ -5,7 +5,6 @@
 #include "precomp.hpp"
 #include "opencv2/core/mat.hpp"
 #include "opencv2/core/types_c.h"
-#include "opencl_kernels_core.hpp"
 
 #undef HAVE_IPP
 #undef CV_IPP_RUN_FAST
@@ -226,22 +225,6 @@ void cv::setIdentity( InputOutputArray _m, const Scalar& s )
     }
 }
 
-
-namespace cv {
-
-UMat UMat::eye(int rows, int cols, int type, UMatUsageFlags usageFlags)
-{
-    return UMat::eye(Size(cols, rows), type, usageFlags);
-}
-
-UMat UMat::eye(Size size, int type, UMatUsageFlags usageFlags)
-{
-    UMat m(size, type, usageFlags);
-    setIdentity(m);
-    return m;
-}
-
-}  // namespace
 
 //////////////////////////////////////////// trace ///////////////////////////////////////////
 
@@ -781,11 +764,6 @@ void cv::reduce(InputArray _src, OutputArray _dst, int dim, int op, int dtype)
 
     CV_OCL_RUN(_dst.isUMat(),
                ocl_reduce(_src, _dst, dim, op, op0, stype, dtype))
-
-    // Fake reference to source. Resolves issue 8693 in case of src == dst.
-    UMat srcUMat;
-    if (_src.isUMat())
-        srcUMat = _src.getUMat();
 
     Mat src = _src.getMat();
     _dst.create(dim == 0 ? 1 : src.rows, dim == 0 ? src.cols : 1, dtype);

@@ -41,7 +41,6 @@
 //M*/
 
 #include "precomp.hpp"
-#include "opencl_kernels_stitching.hpp"
 #include <iostream>
 namespace cv {
 

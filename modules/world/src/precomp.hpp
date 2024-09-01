@@ -45,7 +45,6 @@
 
 #include "opencv2/opencv_modules.hpp"
 
-#include "opencv2/core/ocl.hpp"
 
 #ifdef HAVE_OPENCV_VIDEO
 #include "opencv2/video.hpp"

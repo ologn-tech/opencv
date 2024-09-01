@@ -2,7 +2,6 @@
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/opencv_modules.hpp"
 
-#include "opencv2/core/ocl.hpp"
 
 namespace opencv_test
 {

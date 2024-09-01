@@ -44,12 +44,10 @@ The references are:
 #include "precomp.hpp"
 #include "fast.hpp"
 #include "fast_score.hpp"
-#include "opencl_kernels_features2d.hpp"
 #include "hal_replacement.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 #include "opencv2/core/utils/buffer_area.private.hpp"
 
-#include "opencv2/core/openvx/ovx_defs.hpp"
 
 namespace cv
 {
@@ -571,11 +569,10 @@ public:
         }
 
         Mat mask = _mask.getMat(), grayImage;
-        UMat ugrayImage;
         _InputArray gray = _image;
         if( _image.type() != CV_8U )
         {
-            _OutputArray ogray = _image.isUMat() ? _OutputArray(ugrayImage) : _OutputArray(grayImage);
+            _OutputArray ogray = _OutputArray(grayImage);
             cvtColor( _image, ogray, COLOR_BGR2GRAY );
             gray = ogray;
         }

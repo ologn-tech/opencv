@@ -48,12 +48,10 @@
 // */
 
 #include "precomp.hpp"
-#include "opencl_kernels_imgproc.hpp"
 #include "hal_replacement.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 #include "opencv2/core/utils/buffer_area.private.hpp"
 
-#include "opencv2/core/openvx/ovx_defs.hpp"
 #include "resize.hpp"
 
 #include "opencv2/core/softfloat.hpp"
@@ -4169,11 +4167,6 @@ void cv::resize( InputArray _src, OutputArray _dst, Size dsize,
 
     CV_OCL_RUN(_src.dims() <= 2 && _dst.isUMat() && _src.cols() > 10 && _src.rows() > 10,
                ocl_resize(_src, _dst, dsize, inv_scale_x, inv_scale_y, interpolation))
-
-    // Fake reference to source. Resolves issue 13577 in case of src == dst.
-    UMat srcUMat;
-    if (_src.isUMat())
-        srcUMat = _src.getUMat();
 
     Mat src = _src.getMat();
     _dst.create(dsize, src.type());

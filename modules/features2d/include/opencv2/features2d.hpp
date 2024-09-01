@@ -1234,7 +1234,6 @@ protected:
 
     //! Collection of descriptors from train images.
     std::vector<Mat> trainDescCollection;
-    std::vector<UMat> utrainDescCollection;
 };
 
 /** @brief Brute-force descriptor matcher.

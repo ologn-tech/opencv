@@ -351,29 +351,9 @@ namespace {
             CV_TRACE_ARG_VALUE(range_end, "range.end", (int64)r.end);
 #endif
 
-            try
             {
                 (*ctx.body)(r);
             }
-#if CV__EXCEPTION_PTR
-            catch (...)
-            {
-                ctx.recordException();
-            }
-#else
-            catch (const cv::Exception& e)
-            {
-                ctx.recordException(e.what());
-            }
-            catch (const std::exception& e)
-            {
-                ctx.recordException(e.what());
-            }
-            catch (...)
-            {
-                ctx.recordException("Unknown exception");
-            }
-#endif
 
             if (!ctx.is_rng_used && !(cv::theRNG() == ctx.rng))
                 ctx.is_rng_used = true;
@@ -519,15 +499,9 @@ void parallel_for_(const cv::Range& range, const cv::ParallelLoopBody& body, dou
       isNotNestedRegion = !flagNestedParallelFor.exchange(true);
     if (isNotNestedRegion)
     {
-        try
         {
             parallel_for_impl(range, body, nstripes);
             flagNestedParallelFor = false;
-        }
-        catch (...)
-        {
-            flagNestedParallelFor = false;
-            throw;
         }
     }
     else // nested parallel_for_() calls are not parallelized

@@ -390,8 +390,7 @@ void cv::findContoursLinkRuns(InputArray _image,
 
     // Sanity check: output must be of type vector<vector<Point>>
     CV_Assert(_contours.kind() == _InputArray::STD_VECTOR_VECTOR ||
-              _contours.kind() == _InputArray::STD_VECTOR_MAT ||
-              _contours.kind() == _InputArray::STD_VECTOR_UMAT);
+              _contours.kind() == _InputArray::STD_VECTOR_MAT);
 
     if (!_contours.empty())
         CV_CheckTypeEQ(_contours.type(), CV_32SC2, "Contours must have type CV_32SC2");

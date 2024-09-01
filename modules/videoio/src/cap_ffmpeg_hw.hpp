@@ -6,7 +6,6 @@
 
 #include "opencv2/videoio.hpp"
 #ifdef HAVE_OPENCL
-#include "opencv2/core/ocl.hpp"
 #endif
 #if defined(__OPENCV_BUILD) && !defined(BUILD_PLUGIN)  // TODO Properly detect and add D3D11 / LIBVA dependencies for standalone plugins
 #include "cvconfig.h"
@@ -31,7 +30,6 @@
 #ifdef HAVE_VA
 #include <va/va_backend.h>
 #ifdef HAVE_VA_INTEL
-#include "opencv2/core/va_intel.hpp"
 #ifndef CL_TARGET_OPENCL_VERSION
 #define CL_TARGET_OPENCL_VERSION 120
 #endif

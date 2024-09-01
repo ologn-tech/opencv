@@ -4,7 +4,6 @@
 
 
 #include "precomp.hpp"
-#include "opencl_kernels_core.hpp"
 
 #include "convert_scale.simd.hpp"
 #include "convert_scale.simd_declarations.hpp" // defines CV_CPU_DISPATCH_MODES_ALL=AVX2,...,BASELINE based on CMakeLists.txt content

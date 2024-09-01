@@ -64,9 +64,7 @@ struct Evolution
 };
 
 typedef Evolution<Mat> MEvolution;
-typedef Evolution<UMat> UEvolution;
 typedef std::vector<MEvolution> Pyramid;
-typedef std::vector<UEvolution> UMatPyramid;
 
 /* ************************************************************************* */
 // AKAZE Class Declaration

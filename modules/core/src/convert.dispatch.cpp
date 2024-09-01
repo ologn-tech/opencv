@@ -3,7 +3,6 @@
 // of this distribution and at http://opencv.org/license.html
 
 #include "precomp.hpp"
-#include "opencl_kernels_core.hpp"
 
 #include "convert.simd.hpp"
 #include "convert.simd_declarations.hpp" // defines CV_CPU_DISPATCH_MODES_ALL=AVX2,...,BASELINE based on CMakeLists.txt content
@@ -300,44 +299,6 @@ void Mat::convertTo(OutputArray dst, int type_, double alpha, double beta) const
         for( size_t i = 0; i < it.nplanes; i++, ++it )
             func(ptrs[0], 1, 0, 0, ptrs[1], 1, sz, scale);
     }
-}
-
-void UMat::convertTo(OutputArray dst, int type_, double alpha, double beta) const
-{
-    CV_INSTRUMENT_REGION();
-
-    if (empty())
-    {
-        dst.release();
-        return;
-    }
-
-#ifdef HAVE_OPENCL
-    int stype = type();
-    int sdepth = CV_MAT_DEPTH(stype);
-
-    int ddepth = sdepth;
-    if (type_ >= 0)
-        ddepth = CV_MAT_DEPTH(type_);
-    else
-        ddepth = dst.fixedType() ? dst.depth() : sdepth;
-
-    bool noScale = std::fabs(alpha - 1) < DBL_EPSILON && std::fabs(beta) < DBL_EPSILON;
-    if (sdepth == ddepth && noScale)
-    {
-        copyTo(dst);
-        return;
-    }
-
-    CV_OCL_RUN(dims <= 2,
-               ocl_convertTo(*this, dst, ddepth, noScale, alpha, beta))
-#endif // HAVE_OPENCL
-
-    UMat src = *this;  // Fake reference to itself.
-                       // Resolves issue 8693 in case of src == dst.
-    Mat m = getMat(ACCESS_READ);
-    m.convertTo(dst, type_, alpha, beta);
-    (void)src;
 }
 
 //==================================================================================================

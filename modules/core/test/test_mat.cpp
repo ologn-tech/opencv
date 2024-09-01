@@ -9,7 +9,6 @@
 #include "opencv2/core/eigen.hpp"
 #endif
 
-#include "opencv2/core/cuda.hpp"
 
 namespace opencv_test { namespace {
 

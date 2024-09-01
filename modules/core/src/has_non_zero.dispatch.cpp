@@ -4,7 +4,6 @@
 
 
 #include "precomp.hpp"
-#include "opencl_kernels_core.hpp"
 #include "stat.hpp"
 
 #include "has_non_zero.simd.hpp"

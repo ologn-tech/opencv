@@ -47,7 +47,6 @@
 // */
 
 #include "precomp.hpp"
-#include "opencl_kernels_core.hpp"
 
 
 namespace cv
@@ -325,22 +324,6 @@ void Mat::copyTo( OutputArray _dst ) const
     if( empty() )
     {
         _dst.release();
-        return;
-    }
-
-    if( _dst.isUMat() )
-    {
-        _dst.create( dims, size.p, type() );
-        UMat dst = _dst.getUMat();
-        CV_Assert(dst.u != NULL);
-        size_t i, sz[CV_MAX_DIM] = {0}, dstofs[CV_MAX_DIM], esz = elemSize();
-        CV_Assert(dims > 0 && dims < CV_MAX_DIM);
-        for( i = 0; i < (size_t)dims; i++ )
-            sz[i] = size.p[i];
-        sz[dims-1] *= esz;
-        dst.ndoffset(dstofs);
-        dstofs[dims-1] *= esz;
-        dst.u->currAllocator->upload(dst.u, data, dims, sz, dstofs, dst.step.p, step.p);
         return;
     }
 

@@ -202,12 +202,6 @@ void generateVectorOfMat(size_t len, int rows, int cols, int dtype, CV_OUT std::
 }
 
 CV_WRAP static inline
-void testRaiseGeneralException()
-{
-    throw std::runtime_error("exception text");
-}
-
-CV_WRAP static inline
 AsyncArray testAsyncArray(InputArray argument)
 {
     AsyncPromise p;
@@ -219,14 +213,6 @@ CV_WRAP static inline
 AsyncArray testAsyncException()
 {
     AsyncPromise p;
-    try
-    {
-        CV_Error(Error::StsOk, "Test: Generated async error");
-    }
-    catch (const cv::Exception& e)
-    {
-        p.setException(e);
-    }
     return p.getArrayResult();
 }
 

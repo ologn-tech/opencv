@@ -40,7 +40,6 @@ struct AsyncArray::Impl
     mutable bool has_result; // Mat, UMat or exception
 
     mutable cv::Ptr<Mat> result_mat;
-    mutable cv::Ptr<UMat> result_umat;
 
 
     bool has_exception;
@@ -91,13 +90,6 @@ struct AsyncArray::Impl
                 result_is_fetched = true;
                 return true;
             }
-            if (!result_umat.empty())
-            {
-                dst.move(*result_umat.get());
-                result_umat.release();
-                result_is_fetched = true;
-                return true;
-            }
 #if CV__EXCEPTION_PTR
             if (has_exception && exception)
             {
@@ -108,7 +100,6 @@ struct AsyncArray::Impl
             if (has_exception)
             {
                 result_is_fetched = true;
-                throw cv_exception;
             }
             CV_Error(Error::StsInternal, "AsyncArray: invalid state of 'has_result = true'");
         }
@@ -162,13 +153,6 @@ struct AsyncArray::Impl
             CV_Error(Error::StsError, "Associated AsyncArray has been destroyed");
         std::unique_lock<std::mutex> lock(mtx);
         CV_Assert(!has_result);
-        int k = value.kind();
-        if (k == _InputArray::UMAT)
-        {
-            result_umat = makePtr<UMat>();
-            value.copyTo(*result_umat.get());
-        }
-        else
         {
             result_mat = makePtr<Mat>();
             value.copyTo(*result_mat.get());
@@ -224,7 +208,6 @@ struct AsyncArray::Impl
     mutable bool has_result; // Mat, UMat or exception
 
     mutable cv::Ptr<Mat> result_mat;
-    mutable cv::Ptr<UMat> result_umat;
 
 
     bool has_exception;
@@ -267,13 +250,6 @@ struct AsyncArray::Impl
         {
             dst.move(*result_mat.get());
             result_mat.release();
-            result_is_fetched = true;
-            return true;
-        }
-        if (!result_umat.empty())
-        {
-            dst.move(*result_umat.get());
-            result_umat.release();
             result_is_fetched = true;
             return true;
         }
@@ -327,13 +303,6 @@ struct AsyncArray::Impl
         if (future_is_returned && refcount_future == 0)
             CV_Error(Error::StsError, "Associated AsyncArray has been destroyed");
         CV_Assert(!has_result);
-        int k = value.kind();
-        if (k == _InputArray::UMAT)
-        {
-            result_umat = makePtr<UMat>();
-            value.copyTo(*result_umat.get());
-        }
-        else
         {
             result_mat = makePtr<Mat>();
             value.copyTo(*result_mat.get());

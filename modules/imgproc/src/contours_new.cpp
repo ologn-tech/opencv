@@ -657,8 +657,7 @@ void cv::findContours(InputArray _image,
 
     // Sanity check: output must be of type vector<vector<Point>>
     CV_Assert((_contours.kind() == _InputArray::STD_VECTOR_VECTOR) ||
-              (_contours.kind() == _InputArray::STD_VECTOR_MAT) ||
-              (_contours.kind() == _InputArray::STD_VECTOR_UMAT));
+              (_contours.kind() == _InputArray::STD_VECTOR_MAT));
 
     const int res_type = (method == 0 /*CV_CHAIN_CODE*/) ? CV_8SC1 : CV_32SC2;
     if (!_contours.empty())

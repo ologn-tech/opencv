@@ -6,7 +6,6 @@
 
 #include "test_precomp.hpp"
 #include <cuda_runtime.h>
-#include "opencv2/core/cuda.hpp"
 
 namespace opencv_test { namespace {
 

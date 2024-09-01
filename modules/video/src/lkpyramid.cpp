@@ -43,13 +43,11 @@
 #include <float.h>
 #include <stdio.h>
 #include "lkpyramid.hpp"
-#include "opencl_kernels_video.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 #ifdef HAVE_OPENCV_CALIB3D
 #include "opencv2/calib3d.hpp"
 #endif
 
-#include "opencv2/core/openvx/ovx_defs.hpp"
 
 #define  CV_DESCALE(x,n)     (((x) + (1 << ((n)-1))) >> (n))
 

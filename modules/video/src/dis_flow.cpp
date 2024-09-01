@@ -42,7 +42,6 @@
 
 #include "precomp.hpp"
 #include "opencv2/core/hal/intrin.hpp"
-#include "opencl_kernels_video.hpp"
 
 using namespace std;
 #define EPS 0.001F

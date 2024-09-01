@@ -42,7 +42,6 @@
 //M*/
 
 #include "precomp.hpp"
-#include "opencl_kernels_core.hpp"
 #include <atomic>
 #include <limits>
 #include <iostream>

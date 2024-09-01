@@ -155,14 +155,9 @@ protected:
     void initBackend()
     {
         AutoLock lock(getInitializationMutex());
-        try
         {
             if (!initialized)
                 loadPlugin();
-        }
-        catch (...)
-        {
-            CV_LOG_INFO(NULL, "core(parallel): exception during plugin loading: " << baseName_ << ". SKIP");
         }
         initialized = true;
     }
@@ -243,7 +238,6 @@ void PluginParallelBackendFactory::loadPlugin()
         {
             continue;
         }
-        try
         {
             auto pluginBackend = std::make_shared<PluginParallelBackend>(lib);
             if (!pluginBackend)
@@ -263,10 +257,6 @@ void PluginParallelBackendFactory::loadPlugin()
 #endif
             backend = pluginBackend;
             return;
-        }
-        catch (...)
-        {
-            CV_LOG_WARNING(NULL, "core(parallel): exception during plugin initialization: " << toPrintablePath(plugin) << ". SKIP");
         }
     }
 }

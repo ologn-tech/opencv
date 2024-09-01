@@ -41,7 +41,6 @@
 //M*/
 
 #include "precomp.hpp"
-#include "opencl_kernels_stitching.hpp"
 
 #ifdef HAVE_CUDA
     namespace cv { namespace cuda { namespace device

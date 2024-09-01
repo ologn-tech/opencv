@@ -1,6 +1,5 @@
 #ifdef HAVE_OPENCV_CORE
 
-#include "opencv2/core/cuda.hpp"
 
 typedef std::vector<cuda::GpuMat> vector_GpuMat;
 typedef cuda::GpuMat::Allocator GpuMat_Allocator;
