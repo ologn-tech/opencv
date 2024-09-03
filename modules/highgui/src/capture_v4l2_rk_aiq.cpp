@@ -1232,7 +1232,7 @@ int capture_v4l2_rk_aiq_impl::open(int width, int height, float fps)
 
         {
             // TODO /oem/usr/share/iqfiles/sc3336_CMK-OT2119-PC1_30IRC-F16.json
-            aiq_ctx = rk_aiq_uapi2_sysctl_init(sns_entity_name, "/oem/usr/share/iqfiles", NULL, NULL);
+            aiq_ctx = rk_aiq_uapi2_sysctl_init(sns_entity_name, "/usr/share/iqfiles", NULL, NULL);
             if (!aiq_ctx)
             {
                 fprintf(stderr, "rk_aiq_uapi2_sysctl_init %s failed\n", sns_entity_name);
