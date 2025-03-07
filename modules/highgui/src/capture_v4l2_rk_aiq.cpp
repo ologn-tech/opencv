@@ -61,6 +61,11 @@ static int get_device_model()
             // luckfox pico family and plus pro max mini variants
             device_model = 1;
         }
+        else if (strncmp(buf, "Eyedra", 6) == 0)
+        {
+            // Eyedra
+            device_model = 1;
+        }
         else if (strncmp(buf, "LockzhinerVisionModule", 22) == 0)
         {
             // LockzhinerVisionModule
@@ -797,7 +802,7 @@ public:
     capture_v4l2_rk_aiq_impl();
     ~capture_v4l2_rk_aiq_impl();
 
-    int open(int width, int height, float fps);
+    int open(int index, int width, int height, float fps);
 
     int start_streaming();
 
@@ -885,7 +890,7 @@ static inline size_t least_common_multiple(size_t a, size_t b)
     return lcm;
 }
 
-int capture_v4l2_rk_aiq_impl::open(int width, int height, float fps)
+int capture_v4l2_rk_aiq_impl::open(int index, int width, int height, float fps)
 {
     if (!rkaiq.ready)
     {
@@ -901,14 +906,15 @@ int capture_v4l2_rk_aiq_impl::open(int width, int height, float fps)
 
     // enumerate /sys/class/video4linux/videoN/name and find rkisp_mainpath
     int rkisp_index = -1;
-    for (int i = 0; i < 64; i++)
+    if (index != 0)
     {
+        rkisp_index = index;
         char path[256];
-        sprintf(path, "/sys/class/video4linux/video%d/name", i);
+        sprintf(path, "/sys/class/video4linux/video%d/name", rkisp_index);
 
         FILE* fp = fopen(path, "rb");
         if (!fp)
-            continue;
+            rkisp_index = -1;
 
         char line[32];
         fgets(line, 32, fp);
@@ -916,9 +922,29 @@ int capture_v4l2_rk_aiq_impl::open(int width, int height, float fps)
         fclose(fp);
 
         if (strncmp(line, "rkisp_mainpath", 14) == 0)
+            rkisp_index = -1;
+    }
+    else
+    {
+        for (int i = 0; i < 64; i++)
         {
-            rkisp_index = i;
-            break;
+            char path[256];
+            sprintf(path, "/sys/class/video4linux/video%d/name", i);
+
+            FILE* fp = fopen(path, "rb");
+            if (!fp)
+                continue;
+
+            char line[32];
+            fgets(line, 32, fp);
+
+            fclose(fp);
+
+            if (strncmp(line, "rkisp_mainpath", 14) == 0)
+            {
+                rkisp_index = i;
+                break;
+            }
         }
     }
 
@@ -1727,9 +1753,9 @@ capture_v4l2_rk_aiq::~capture_v4l2_rk_aiq()
     delete d;
 }
 
-int capture_v4l2_rk_aiq::open(int width, int height, float fps)
+int capture_v4l2_rk_aiq::open(int index, int width, int height, float fps)
 {
-    return d->open(width, height, fps);
+    return d->open(index, width, height, fps);
 }
 
 int capture_v4l2_rk_aiq::get_width() const

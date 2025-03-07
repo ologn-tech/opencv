@@ -41,6 +41,7 @@ public:
     VideoCaptureImpl();
 
 public:
+    int index;
     bool is_opened;
     int width;
     int height;
@@ -62,6 +63,7 @@ public:
 
 VideoCaptureImpl::VideoCaptureImpl()
 {
+    index = 0;
     is_opened = false;
     width = 640;
     height = 480;
@@ -85,6 +87,7 @@ bool VideoCapture::open(int index)
     {
         release();
     }
+    d->index = index;
 
 #if CV_WITH_AW
     if (capture_v4l2_aw_isp::supported())
@@ -112,7 +115,7 @@ bool VideoCapture::open(int index)
 #if CV_WITH_RK
     if (capture_v4l2_rk_aiq::supported())
     {
-        int ret = d->cap_v4l2_rk_aiq.open(d->width, d->height, d->fps);
+        int ret = d->cap_v4l2_rk_aiq.open(d->index, d->width, d->height, d->fps);
         if (ret == 0)
         {
             d->width = d->cap_v4l2_rk_aiq.get_width();

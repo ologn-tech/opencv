@@ -30,7 +30,7 @@ public:
     capture_v4l2_rk_aiq();
     ~capture_v4l2_rk_aiq();
 
-    int open(int width = 640, int height = 480, float fps = 30);
+    int open(int index =0, int width = 640, int height = 480, float fps = 30);
 
     int get_width() const;
     int get_height() const;
